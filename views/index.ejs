@@ -8,4 +8,34 @@
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
   </body>
+  
+<form method="get" action="/gen">
+    url : <input type="text" name="url"/><br>
+    number: <input type="text" name="num"/>
+    <input id="submit" type="submit" value="Submit"/>
+</form>
+
+
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script>
+    $(function(){
+        $('#submit').on('click', function(e){
+            e.preventDefault();
+            var qs = $( "form" ).serialize();
+            $.ajax('/gen' + '?' + qs, {
+                success: function(){
+                    console.log("submission successful");
+                }
+
+
+            });
+        });
+
+
+    });
+
+
+  </script>
+
 </html>
