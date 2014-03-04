@@ -4,6 +4,7 @@
   "description": "request generator for client side profiling",
   "main": "main.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,6 +17,8 @@
     "express": "~3.4.8",
     "spooky": "~0.2.4",
     "phantom": "~0.5.4",
-    "casperjs": "~1.1.0-beta3"
+    "casperjs": "~1.1.0-beta3",
+    "ejs": "*",
+    "stylus": "*"
   }
 }

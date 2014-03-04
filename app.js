@@ -1,29 +1,48 @@
 var express = require('express');
 var app = express();
+var routes = require('./routes');
+var user = require('./routes/user');
+var http = require('http');
+var path = require('path');
+
 var links = [];
 
 
-app.get('/index', function(req, res) {
 
+app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.methodOverride());
+app.use(express.cookieParser('your secret here'));
+app.use(express.session());
+app.use(app.router);
+app.use(require('stylus').middleware(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
-    genRequest('http://ebay.com', number);
+// development only
+if ('development' == app.get('env')) {
+  app.use(express.errorHandler());
+}
 
-    
-
-
+app.get('/', routes.index);
+app.get('/users', user.list);
+app.get('/gen', function(req, res) {
+    if (req.body) {
+        var url = req.body.url || 'http://ebay.com';
+        var num = req.body.num || 50;
+        genRequest(url, num);
+    }
 });
 
-app.listen(3000);
-
-// function getLinks() {
-//     //console.log(" enter");
-//     var links = document.querySelectorAll('.rls a');
-//     return Array.prototype.map.call(links, function(e) {
-//         return e.getAttribute('href');
-//     });
+http.createServer(app).listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + app.get('port'));
+});
 
 
-// }
 
 function genRequest(url, num) {
     try {
@@ -40,56 +59,33 @@ function genRequest(url, num) {
             verbose: true
         }
     }, function(err) {
-        var i =0;
+        var i = 0;
         if (err) {
             e = new Error('Failed to initialize SpookyJS');
             e.details = err;
             throw e;
         }
 
-        i = spooky.start(url).repeat(num + 1, function(){
-            console.log("Iteration # " + ++i);
-            return i;
-        }, {i: i});
+        spooky.start(url, function() {
+            console.log("spooky started");
 
+        });
 
-        // spooky.then(function() {
-        //     this.fill('form#gh-f', {
-        //         '_nkw': 'nike'
-        //     }, true);
-        // });
+        spooky.then([{
+                num: num
+            },
+            function() {
+                var i = 0;
+                this.repeat(num, function() {
 
+                    console.log("Iteration # " + (++i));
 
-        // links = spooky.then(function(links) {
-        //     console.log("check1: " + links);
-        //     try {
-                
-        //         links = links.concat(this.evaluate(getLinks));
-        //     } catch (err) {
-        //         e = new Error('failed to concat');
-        //         e.details = err;
-        //         throw e;
-        //     }
-        //     return links;
-
-        // }, { 
-        //     links: links
-        // });
+                });
+            }
+        ]);
 
         spooky.run();
-        
-        // spooky.run(function(links) {
-        //     // echo results in some pretty fashion
-            
-        //         console.log("check2: " + links + "of type: " + typeof links);
-        //         // this.echo(links.length + ' links found:');
-        //         // this.echo(' - ' + links.join('\n - ')).exit();
-        //         return links.join('\n -');
 
-        //     return null;
-        // }, {
-        //     links: links
-        // });
     });
 
     spooky.on('console', function(line) {
@@ -103,3 +99,48 @@ function genRequest(url, num) {
         }
     });
 }
+
+
+
+/*
+
+/**
+ * Module dependencies.
+ 
+
+var express = require('express');
+var routes = require('./routes');
+var user = require('./routes/user');
+var http = require('http');
+var path = require('path');
+
+var app = express();
+
+// all environments
+app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.methodOverride());
+app.use(express.cookieParser('your secret here'));
+app.use(express.session());
+app.use(app.router);
+app.use(require('stylus').middleware(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// development only
+if ('development' == app.get('env')) {
+  app.use(express.errorHandler());
+}
+
+app.get('/', routes.index);
+app.get('/users', user.list);
+
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
+
+ */
