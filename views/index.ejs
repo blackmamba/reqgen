@@ -3,18 +3,38 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/pure/0.4.2/pure-min.css" />
+
   </head>
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
-  </body>
   
+  
+
+<!-- 
 <form method="get" action="/gen">
     url : <input type="text" name="url"/><br>
     number: <input type="text" name="num"/>
     <input id="submit" type="submit" value="Submit"/>
-</form>
+</form> -->
+<form method ="get" action="/gen" class="pure-form pure-form-stacked">
+    <fieldset>
+        <div class="pure-control-group">
+            <label for="url">Url</label>
+            <input id="url" name ="url" type="text" placeholder="http://qa.ebay.com">
+        </div>
 
+        <div class="pure-control-group">
+            <label for="number">No of Times</label>
+            <input id="number" type="text" placeholder="Some Number eg: 50">
+        </div>
+
+       
+       <button type="submit" id="submit" class="pure-button pure-button-primary">Submit</button>
+
+    </fieldset>
+</form>
 
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -37,5 +57,5 @@
 
 
   </script>
-
+</body>
 </html>
