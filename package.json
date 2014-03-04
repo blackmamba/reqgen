@@ -13,6 +13,9 @@
   "author": "Hitesh Ubharani",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "express": "~3.4.8"
+    "express": "~3.4.8",
+    "spooky": "~0.2.4",
+    "phantom": "~0.5.4",
+    "casperjs": "~1.1.0-beta3"
   }
 }
