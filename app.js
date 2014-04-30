@@ -32,9 +32,17 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/gen', function(req, res) {
     if (req.body) {
-        var url = req.body.url || 'http://ebay.com';
-        var num = req.body.num || 50;
-        genRequest(url, num);
+
+        
+        console.log("req.url: " + req.param('url'));
+        var url = req.param('url') || 'http://ebay.com';
+        console.log("req.number: " + req.param('number'));
+        var num = req.param('number') || 50;
+        //for (var i =0; i < num; i++) {
+        //    console.log("url: " + url + "num: " +num);
+            genRequest(url, num);    
+        //}
+        
     }
 });
 
@@ -72,12 +80,15 @@ function genRequest(url, num) {
         });
 
         spooky.then([{
-                num: num
+                num: num,
+                url: url
             },
             function() {
                 var i = 0;
                 this.repeat(num, function() {
-
+                    // location.href = "http://ebay.com";
+                    // location.href = url;
+                    this.thenOpen(url); 
                     console.log("Iteration # " + (++i));
 
                 });
